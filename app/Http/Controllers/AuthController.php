@@ -54,7 +54,7 @@ class AuthController extends Controller
     ]);
 
     try {
-      $token = JWTAuth::getToken()?->get();
+      $token = JWTAuth::fromUser($user);
     } catch (JWTException $e) {
       // return response()->json(['error' => 'Could not create token'], 500);
       return $this->apiResponse(500, 'Could not create token',);
