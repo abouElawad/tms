@@ -22,7 +22,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'project_id',
+        'user_id',
     ];
 
     /**
@@ -53,6 +55,20 @@ class User extends Authenticatable implements JWTSubject
 
     public function role(){
       return $this->belongsTo(Role::class);
+    }
+    public function projects(){
+      return $this->hasMany(Project::class);
+    }
+
+    public function projectMembers()
+    {
+      return $this->belongsToMany(Project::class,
+                                  'project_user',
+                                  'project_id',
+                                  'user_id',
+                                'id',
+                              'id')
+                              ->withPivot('role_id');
     }
 
      /**

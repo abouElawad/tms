@@ -25,8 +25,6 @@ class AuthController extends Controller
     // $this->middleware('auth:api', ['except' => ['login','register']]);
   }
 
-
-
   public function register(Request $request)
   {
 
@@ -45,7 +43,6 @@ class AuthController extends Controller
       return $this->apiResponse(422, 'validation error', $errors);
     }
 
-
     $user = User::create([
       'name' => $request->name,
       'email' => $request->email,
@@ -56,7 +53,7 @@ class AuthController extends Controller
     try {
       $token = JWTAuth::fromUser($user);
     } catch (JWTException $e) {
-      // return response()->json(['error' => 'Could not create token'], 500);
+
       return $this->apiResponse(500, 'Could not create token',);
     }
     $data = array_merge($user->toArray(), ['role' => $user->role->name], ['token' => $token]);
