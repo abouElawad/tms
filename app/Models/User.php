@@ -70,7 +70,11 @@ class User extends Authenticatable implements JWTSubject
                               'id')
                               ->withPivot('role_id');
     }
-
+    
+    public function assignedTasks()
+    {
+      return $this->hasMany(Task::class,'assigned_to','id');
+    }
      /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

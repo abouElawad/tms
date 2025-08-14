@@ -8,8 +8,8 @@ class Task extends Model
 {
     protected $fillable =['title','description','priority','status','due_date','project_id','assigned_to','created_by'];
 
-    protected $hidden=['created_at', 'updated_at'];
-
+    // protected $hidden=['created_at', 'updated_at'];
+    public $timestamps = true;
     public function project()
     {
       return $this->belongsTo(Project::class);
@@ -29,4 +29,6 @@ class Task extends Model
                               'id'
                                       );
     }
+
+
 }

@@ -15,17 +15,24 @@ class TaskController extends Controller
   use ApiResponseTrait;
   public function create(Request $request, $project)
   {
+
+
     $project = Project::find($project);
 
     if (is_null($project)) {
       return $this->apiResponse(404, 'Project not found', null, null);
     }
-    if (!$request->has(['created_by', 'project_id'])) {
-      $request->merge([
-        'project_id' => $request->project_id ?? $project->id,
-        'created_by' => auth()->user()->id,
+    // if (!$request->has(['created_by', 'project_id'])) {
+    //   $request->merge([
+    //     'project_id' => $request->project_id ?? $project->id,
+    //     'created_by' => auth()->id(),
+    //   ]);
+    // }
+
+    $request->merge([
+    'project_id' => $request->input('project_id', $project->id),
+    'created_by' => $request->input('created_by', auth()->id()),
       ]);
-    }
 
     $validation = Validator::make($request->all(), [
       'title' => 'required|string|min:3|max:255',
@@ -47,7 +54,7 @@ class TaskController extends Controller
 
     $task = Task::create($request->all());
 
-    return $this->apiResponse(201, 'task : ' . $task->title . ' has been created successfully', null, $task);
+    return $this->apiResponse(201, 'task : ' . $task->title . ' has been created successfully', null, new TaskResource($task->load(['project:id,name', 'assignedTo:id,name', 'createdBy:id,name'])));
   }
 
   public function index($project)
@@ -76,7 +83,7 @@ class TaskController extends Controller
       return $this->apiResponse(404, 'Task not found', null, null);
     }
 
-    return $this->apiResponse(200, 'Data of task : ' . $task->name, null, new TaskResource($task));
+    return $this->apiResponse(200, 'Data of task : ' . $task->title, null, new TaskResource($task));
   }
 
   public function delete($task)
@@ -113,7 +120,7 @@ class TaskController extends Controller
     }
     $task->update($request->only('assigned_to'));
 
-    return $this->apiResponse(200, 'task : ' . $task->name, null, new TaskResource($task));
+    return $this->apiResponse(200, 'task : ' . $task->title, null, new TaskResource($task));
   }
 
 
@@ -139,6 +146,6 @@ class TaskController extends Controller
 
     $task->update($request->only('status'));
 
-    return $this->apiResponse(200, 'task : ' . $task->name, null, new TaskResource($task));
+    return $this->apiResponse(200, 'task : ' . $task->title, null, new TaskResource($task));
   }
 }

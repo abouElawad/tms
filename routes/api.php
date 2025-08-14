@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Middleware\JwtAuthenticate;
@@ -48,9 +49,22 @@ Route::group([
    Route::delete('tasks/{task}',[TaskController::class, 'delete']);
    Route::put('tasks/{task}/assign',[TaskController::class, 'assignTaskToUser']);
    Route::put('tasks/{task}/status',[TaskController::class, 'updateTaskStatus']);
+
+   #dashboard Group
+  Route::get('dashboard/stats',[DashboardController::class,'stats']);
+  Route::get('dashboard/recent-activity',[DashboardController::class,'recentActivity']);
+  Route::get('users/{user}/tasks',[DashboardController::class,"showUserTasks"]);
+  Route::get('users/{user}/tasks1',[DashboardController::class,"showUserTasks1"]);
+
+
+
 });
 /**
-
-
+ * GET /api/dashboard/r
+ * 
+ * 
+ * 
+ * 
+ * 
  */
 
