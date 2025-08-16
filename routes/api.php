@@ -18,6 +18,8 @@ Route::get('/user', function (Request $request) {
 Route::withoutMiddleware([JwtAuthenticate::class])->group(function () {
  Route::post('register', [AuthController::class,'register']);
     Route::post('login', [AuthController::class,'login']);
+    Route::post('forgot-password',[PasswordResetController::class,'forgotPassword']);
+Route::post('reset-password',[PasswordResetController::class,'resetPassword'])->name('password.reset');
 });
 
 Route::group([
@@ -60,10 +62,9 @@ Route::group([
 
   #password reset Group
 
-  Route::post('forgot-password',[PasswordResetController::class,'forgotPassword']);
-  Route::post('reset-password',[PasswordResetController::class,'resetPassword'])->name('password.reset');;
-
+  
 });
+
 /**
  * GET /api/dashboard/r
  * 

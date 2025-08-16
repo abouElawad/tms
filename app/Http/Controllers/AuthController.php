@@ -161,15 +161,20 @@ class AuthController extends Controller
 
   public function updateUser(Request $request)
   {
-    if ($user = auth()->user()) {
+    
+    #this represents a second layer if middleware fails.
+    if (! $user = auth()->user()) {
+      return $this->apiResponse(200, 'can not preform an update', 'no logged user to update');
+    }
+
       $validation = Validator::make($request->all(), [
         'name' => 'string|min:3|max:255',
-        'email' => 'email|unique:users,email,' . $user->id,
+        'email' => 'email|unique:users,email,'. $user->id,
         // 'password'=>'current_password:api',
         'role_id' => 'exists:roles,id',
+      ],[
+        'email.unique'=>'This email address is already in use or does not belong to you.'
       ]);
-
-
 
       if ($validation->fails()) {
         $errors = collect($validation->messages())
@@ -183,8 +188,7 @@ class AuthController extends Controller
       $data = array_merge($user->toArray(), ['role' => $userRole], ['token' => $request->bearerToken()]);
 
       return $this->apiResponse(200, 'user updated successfully', null, $data);
-    } else {
-      return $this->apiResponse(200, 'can not preform an update', 'no logged user to update');
-    }
+    
+     
   }
 }
