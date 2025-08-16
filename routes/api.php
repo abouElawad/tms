@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Middleware\JwtAuthenticate;
+use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,14 +15,14 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::withoutMiddleware('jwt.auth')->group(function () {
+Route::withoutMiddleware([JwtAuthenticate::class])->group(function () {
  Route::post('register', [AuthController::class,'register']);
     Route::post('login', [AuthController::class,'login']);
 });
 
 Route::group([
 
-    'middleware' =>  ['jwt.auth'],
+    'middleware' =>  JwtAuthenticate::class,
     
 
 ], function ($router) {
@@ -56,7 +58,10 @@ Route::group([
   Route::get('users/{user}/tasks',[DashboardController::class,"showUserTasks"]);
   Route::get('users/{user}/tasks1',[DashboardController::class,"showUserTasks1"]);
 
+  #password reset Group
 
+  Route::post('forgot-password',[PasswordResetController::class,'forgotPassword']);
+  Route::post('reset-password',[PasswordResetController::class,'resetPassword'])->name('password.reset');;
 
 });
 /**
@@ -64,7 +69,7 @@ Route::group([
  * 
  * 
  * 
- * 
+
  * 
  */
 

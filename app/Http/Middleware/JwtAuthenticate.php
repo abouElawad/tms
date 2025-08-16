@@ -18,11 +18,10 @@ class JwtAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-      $response = $next($request);
-
       if (!auth()->user()) {
             return $this->apiResponse(401, 'can not access (unauthorized)', 'no registered user');
         }
-        return  $response;
+
+        return $next($request);
     }
 }
