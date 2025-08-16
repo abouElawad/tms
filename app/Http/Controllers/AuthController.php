@@ -70,7 +70,7 @@ class AuthController extends Controller
     $credentials = request(['email', 'password']);
 
     if (! $token = auth()->attempt($credentials)) {
-      return $this->apiResponse(401, 'not authorized', 'Invalid credentials');
+      return $this->apiResponse(401, 'not authorized access', 'Invalid credentials please check email and password');
     }
 
     $data = array_merge(Auth::user()->toArray(), ['role' => Auth::user()->role->name], ['token' => $token]);

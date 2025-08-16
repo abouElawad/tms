@@ -69,6 +69,7 @@ class ProjectController extends Controller
   }
   public function update(Request $request, $project)
   {
+
     $project = Project::find($project);
     if (is_null($project)) {
       return $this->apiResponse(404, 'Project not found', null, null);
