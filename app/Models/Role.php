@@ -8,15 +8,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Role extends Model
 {
-    use HasFactory, Notifiable;
-  
-      protected $fillable = ['name'];
-    protected $hidden =['id','created_at','updated_at'];
+  use HasFactory, Notifiable;
 
-    public function users()
-    {
-      return $this->hasMany(User::class);
-    }
+  protected $fillable = ['name'];
+  protected $hidden = ['id', 'created_at', 'updated_at'];
 
-    
+  public function users()
+  {
+    return $this->hasMany(User::class);
+  }
+
+  public function roleUser()
+  {
+    return $this->belongsToMany(
+      User::class,
+      'role_user',
+      'user_id',
+      'role_id'
+    );
+  }
+
+  public function permissions()
+  {
+    return $this->belongsToMany(Permission::class);
+  }
 }

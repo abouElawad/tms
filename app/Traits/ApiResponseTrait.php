@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Traits;
+
+use Illuminate\Http\Response;
+
 Trait ApiResponseTrait
 {
-  public function apiResponse($code=200,$message=null, $errors=null, $data=null)
+  public function apiResponse($code=200,$message=null, $errors=null, $data=null):Response
   {
     $response=[
       'code' => $code,

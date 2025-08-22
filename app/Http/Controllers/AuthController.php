@@ -188,7 +188,7 @@ class AuthController extends Controller
       $data = array_merge($user->toArray(), ['role' => $userRole], ['token' => $request->bearerToken()]);
 
       return $this->apiResponse(200, 'user updated successfully', null, $data);
-    
-     
   }
+
+  
 }
