@@ -9,6 +9,7 @@ use App\Http\Middleware\JwtAuthenticate;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\UserController;
 use App\Models\Permission;
 use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
 
@@ -65,17 +66,21 @@ Route::group([
   Route::get('users/{user}/tasks1', [DashboardController::class, "showUserTasks1"]);
 
   #role group
-  Route::get('roles',[RoleController::class,'index']);
-  Route::post('roles',[RoleController::class,'create']);
-  Route::put('roles/{role}',[RoleController::class,'update']);
-  Route::get('roles/{role}',[RoleController::class,'show']);
-  Route::delete('roles/{role}',[RoleController::class,'delete']);
+  Route::get('roles', [RoleController::class, 'index']);
+  Route::post('roles', [RoleController::class, 'create']);
+  Route::put('roles/{role}', [RoleController::class, 'update']);
+  Route::get('roles/{role}', [RoleController::class, 'show']);
+  Route::delete('roles/{role}', [RoleController::class, 'delete']);
 
   # assign/ remove  Permission to role
-  Route::post('roles/{role}/permissions',[RoleController::class, 'assignPermission']);
-  Route::delete('roles/{role}/permissions',[RoleController::class, 'removePermission']);
+  Route::post('roles/{role}/permissions', [RoleController::class, 'assignPermission']);
+  Route::delete('roles/{role}/permissions', [RoleController::class, 'removePermission']);
+
+  # assign/ remove  Permission to role
+  Route::post('users/{user}/permissions', [UserController::class, 'assignPermission']);
+  Route::delete('users/{user}/permissions', [UserController::class, 'removePermission']);
   #permissions Group
-  Route::get('permissions',function(){
+  Route::get('permissions', function () {
     return Permission::all();
   });
 });
